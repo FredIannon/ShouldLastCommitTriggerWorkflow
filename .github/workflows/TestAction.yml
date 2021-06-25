@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-    repoURL : 'https://api.github.com/repos/ncr-swt-hospitality/nbo-GitHubActionsTestbed'
+    repoURL : 'https://api.github.com/repos/FredIannon/ShouldLastCommitTriggerWorkflow'
     branchToLookAtForLastCommit : 'develop'
 
 jobs:
@@ -21,7 +21,8 @@ jobs:
 
       - name: Execute ShouldRunScheduledBuild Action
         id: ShouldRunScheduledBuild
-        uses: ./.github/actions/ShouldRunScheduledBuild
+#        uses: ./.github/actions/ShouldRunScheduledBuild
+        uses: fiannon/ShouldRunScheduledBuild
         with:
           repo: ${{ env.repoURL }}
           branchToLookAtForLastCommit: ${{ env.branchToLookAtForLastCommit }}
