@@ -3,6 +3,10 @@ name: TestAction
 on:
   workflow_dispatch:
 
+env:
+    repoURL : 'https://api.github.com/repos/ncr-swt-hospitality/nbo-GitHubActionsTestbed'
+    branchToLookAtForLastCommit : 'develop'
+
 jobs:
   build:
     runs-on: windows-latest
@@ -14,3 +18,15 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
+
+      - name: Execute ShouldRunScheduledBuild Action
+        id: ShouldRunScheduledBuild
+        uses: ./.github/actions/ShouldRunScheduledBuild
+        with:
+          repo: ${{ env.repoURL }}
+          branchToLookAtForLastCommit: ${{ env.branchToLookAtForLastCommit }}
+          pat: ${{ secrets.REPO_GHA_PAT }}
+
+      - name: Echo Results
+#        if: steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild == 'true'
+        run: echo shouldRunScheduledBuild value is ${{ steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild }}
