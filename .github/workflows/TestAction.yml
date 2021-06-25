@@ -24,7 +24,7 @@ jobs:
 #        uses: ./.github/actions/ShouldRunScheduledBuild
         uses: FredIannon/ShouldLastCommitTriggerWorkflow@v0.1-alpha
         with:
-          repo: ${{ env.repoURL }}
+          repoURL: ${{ env.repoURL }}
           branchToLookAtForLastCommit: ${{ env.branchToLookAtForLastCommit }}
           pat: ${{ secrets.REPO_GHA_PAT }}
 
