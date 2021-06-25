@@ -30,4 +30,4 @@ jobs:
 
       - name: Echo Results
 #        if: steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild == 'true'
-        run: echo shouldRunScheduledBuild value is ${{ steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild }}
+        run: echo "shouldRunScheduledBuild value is ${{ steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild }}"
