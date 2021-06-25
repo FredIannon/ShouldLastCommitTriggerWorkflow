@@ -21,8 +21,8 @@ jobs:
 
       - name: Execute ShouldRunScheduledBuild Action
         id: ShouldRunScheduledBuild
-        uses: ./
-#        uses: FredIannon/ShouldLastCommitTriggerWorkflow@v0.1-alpha
+#        uses: ./
+        uses: FredIannon/ShouldLastCommitTriggerWorkflow@v0.2-alpha
         with:
           repoURL: ${{ env.repoURL }}
           branchToLookAtForLastCommit: ${{ env.branchToLookAtForLastCommit }}
