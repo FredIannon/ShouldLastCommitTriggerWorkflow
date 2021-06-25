@@ -1,0 +1,57 @@
+name: fiannon/ShouldRunScheduledBuild
+description: 'Determines if the last commit date in a GIT branch should trigger a workflow based on a provided timespan'
+inputs:
+  branchToLookAtForLastCommit:
+    description: 'branchToLookAtForLastCommit'
+    required: true
+  pat:
+    description: 'pat'
+    required: true
+  lastScheduledRunCheckTimeOffset:
+    description: 'lastScheduledRunCheckTimeOffset'
+    required: false
+    default: '25'           #TODO : May want to fool with the offset..this is assuming it was last checked 24 hours ago (with a one hour grace window)
+outputs:
+  shouldRunScheduledBuild:
+    description: 'shouldRunScheduledBuild'
+    value: ${{ steps.GenerateBuildVersion.outputs.ShouldRunScheduledBuild }}
+runs:
+  using: "composite"
+  steps:
+    - name: Display input parms
+      run: |
+        echo "branchToLookAtForLastCommit: ${{ inputs.branchToLookAtForLastCommit }}"
+        echo "pat: ${{ inputs.pat }}"   #TODO: COMMENT OUT
+        echo "lastScheduledRunCheckTimeOffset: ${{ inputs.lastScheduledRunCheckTimeOffset }}"
+      shell: pwsh
+
+    - name: ShouldRunScheduledBuild step
+      id: ShouldRunScheduledBuild
+      run: |
+        $Header = @{Authorization = "Token ${{ inputs.pat }}"}
+
+        # TODO : Need to parameterize this
+        $githupApiLastCommit = Invoke-RestMethod -Uri https://api.github.com/repos/ncr-swt-hospitality/nbo-GitHubActionsTestbed/commits/${{ inputs.branchToLookAtForLastCommit }} -Headers $Header
+
+        $lastCommit = $githupApiLastCommit | Select-Object -ExpandProperty commit
+        $lastCommitter = $lastCommit | Select-Object -ExpandProperty committer
+        $lastCommitDate = $lastCommitter | Select-Object -ExpandProperty date
+        $lastCommitDate = [DateTime]$lastCommitDate
+
+        $lastScheduledRunCheckTime = (Get-Date).AddHours(-${{inputs.lastScheduledRunCheckTimeOffset}})
+
+        $lastCommitDate_UTC = $lastCommitDate.ToUniversalTime()
+        $lastScheduledRunCheckTime_UTC = $lastScheduledRunCheckTime.ToUniversalTime()
+
+        $NeedToRun = 'false'
+        if ($lastCommitDate_UTC -gt $lastScheduledRunCheckTime_UTC) { $NeedToRun = 'true' }
+
+        echo "lastCommit: $lastCommit"
+        echo "lastCommitter: $lastCommitter"
+        echo "lastCommitDate: $lastCommitDate"
+        echo "lastScheduledRunCheckTime: $lastScheduledRunCheckTime"
+        echo "lastCommitDate_UTC: $lastCommitDate_UTC"
+        echo "lastScheduledRunCheckTime_UTC: $lastScheduledRunCheckTime_UTC"
+        echo "NeedToRun: $NeedToRun"
+        echo "::set-output name=shouldRunScheduledBuild::$NeedToRun"
+      shell: pwsh
