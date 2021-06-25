@@ -1,6 +1,9 @@
 name: fiannon/ShouldRunScheduledBuild
 description: 'Determines if the last commit date in a GIT branch should trigger a workflow based on a provided timespan'
 inputs:
+  repoURL:
+    description: 'repoURL'
+    required: true
   branchToLookAtForLastCommit:
     description: 'branchToLookAtForLastCommit'
     required: true
@@ -20,8 +23,9 @@ runs:
   steps:
     - name: Display input parms
       run: |
+        echo "repoURL: ${{ inputs.repoURL }}"
         echo "branchToLookAtForLastCommit: ${{ inputs.branchToLookAtForLastCommit }}"
-        echo "pat: ${{ inputs.pat }}"   #TODO: COMMENT OUT
+        #echo "pat: ${{ inputs.pat }}"   #TODO: COMMENT OUT
         echo "lastScheduledRunCheckTimeOffset: ${{ inputs.lastScheduledRunCheckTimeOffset }}"
       shell: pwsh
 
@@ -31,7 +35,7 @@ runs:
         $Header = @{Authorization = "Token ${{ inputs.pat }}"}
 
         # TODO : Need to parameterize this
-        $githupApiLastCommit = Invoke-RestMethod -Uri https://api.github.com/repos/ncr-swt-hospitality/nbo-GitHubActionsTestbed/commits/${{ inputs.branchToLookAtForLastCommit }} -Headers $Header
+        $githupApiLastCommit = Invoke-RestMethod -Uri ${{ inputs.repoURL }}/commits/${{ inputs.branchToLookAtForLastCommit }} -Headers $Header
 
         $lastCommit = $githupApiLastCommit | Select-Object -ExpandProperty commit
         $lastCommitter = $lastCommit | Select-Object -ExpandProperty committer
