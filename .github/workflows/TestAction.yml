@@ -21,13 +21,13 @@ jobs:
 
       - name: Execute ShouldRunScheduledBuild Action
         id: ShouldRunScheduledBuild
-#        uses: ./.github/actions/ShouldRunScheduledBuild
-        uses: FredIannon/ShouldLastCommitTriggerWorkflow@v0.1-alpha
+        uses: ./
+#        uses: FredIannon/ShouldLastCommitTriggerWorkflow@v0.1-alpha
         with:
           repoURL: ${{ env.repoURL }}
           branchToLookAtForLastCommit: ${{ env.branchToLookAtForLastCommit }}
           pat: ${{ secrets.REPO_GHA_PAT }}
 
       - name: Echo Results
-#        if: steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild == 'true'
-        run: echo "shouldRunScheduledBuild value is ${{ steps.ShouldRunScheduledBuild.outputs.shouldRunScheduledBuild }}"
+#        if: steps.ShouldRunScheduledBuild.outputs.ShouldRunScheduledBuild == 'true'
+        run: echo "ShouldRunScheduledBuild value is ${{ steps.ShouldRunScheduledBuild.outputs.ShouldRunScheduledBuild }}"

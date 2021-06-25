@@ -15,9 +15,9 @@ inputs:
     required: false
     default: '25'           #TODO : May want to fool with the offset..this is assuming it was last checked 24 hours ago (with a one hour grace window)
 outputs:
-  shouldRunScheduledBuild:
-    description: 'shouldRunScheduledBuild'
-    value: ${{ steps.GenerateBuildVersion.outputs.ShouldRunScheduledBuild }}
+  ShouldRunScheduledBuild:
+    description: 'ShouldRunScheduledBuild'
+    value: ${{ steps.ShouldRunScheduledBuild.outputs.ShouldRunScheduledBuild }}
 runs:
   using: "composite"
   steps:
@@ -57,5 +57,5 @@ runs:
         echo "lastCommitDate_UTC: $lastCommitDate_UTC"
         echo "lastScheduledRunCheckTime_UTC: $lastScheduledRunCheckTime_UTC"
         echo "NeedToRun: $NeedToRun"
-        echo "::set-output name=shouldRunScheduledBuild::$NeedToRun"
+        echo "::set-output name=ShouldRunScheduledBuild::$NeedToRun"
       shell: pwsh
