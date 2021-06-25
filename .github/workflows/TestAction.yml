@@ -22,7 +22,7 @@ jobs:
       - name: Execute ShouldRunScheduledBuild Action
         id: ShouldRunScheduledBuild
 #        uses: ./.github/actions/ShouldRunScheduledBuild
-        uses: fiannon/ShouldRunScheduledBuild
+        uses: FredIannon/ShouldLastCommitTriggerWorkflow@v0.1-alpha
         with:
           repo: ${{ env.repoURL }}
           branchToLookAtForLastCommit: ${{ env.branchToLookAtForLastCommit }}
